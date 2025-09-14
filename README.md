@@ -1,4 +1,77 @@
-# ENVIRONMENT-POLLUTION-
-A deep learning project for environmental monitoring using semantic segmentation on satellite images to detect deforested areas in the Amazon rainforest. This project uses Sentinel-2 satellite imagery and a U-Net-based Convolutional Neural Network (CNN) to identify deforestation from satellite data.
-# DATA PREPROCESSING -
-In this project, the data preprocessing phase involved preparing Sentinel-2 satellite images and corresponding deforestation masks for segmentation using a U-Net model. The images were taken from the 1_CLOUD_FREE_DATASET/2_SENTINEL2/IMAGE_16_GRID folder, and the masks were sourced from 3_TRAINING_MASKS/MASK_16_GRID. Each image and mask pair was matched by filename to ensure alignment, while unnecessary files such as .aux.xml were excluded. Using the tifffile library, both images and masks were loaded, resized to 256×256 pixels, and normalized. Images were scaled to a [0, 1] range, and masks were binarized so that they contain only 0s and 1s, representing background and deforested areas respectively. After preprocessing, the dataset was split into training and validation sets with an 80-20 ratio. The final output consisted of 16 matched pairs, with the shapes of the training and validation sets as follows: X_train (12, 256, 256, 3), y_train (12, 256, 256, 1), X_val (4, 256, 256, 3), and y_val (4, 256, 256, 1).
+#  Deforestation Detection using U-Net on Sentinel-2 Imagery
+
+This project focuses on detecting deforested regions using a deep learning-based semantic segmentation model (U-Net) applied to **cloud-free Sentinel-2 satellite images**. It enables efficient environmental monitoring by automatically identifying areas affected by deforestation.
+
+---
+
+##  Project Goal
+
+To develop an automated solution using U-Net CNN that accurately segments deforestation areas from satellite images. The system helps minimize manual satellite inspection time and supports real-time environmental conservation efforts.
+
+---
+
+##  Dataset Description
+
+- **Source**: [Kaggle – Deforestation Detection Dataset by Akhil Chibber](https://www.kaggle.com/datasets/akhilchibber/deforestation-detection-dataset)
+- **Used Data**:
+  - `1_CLOUD_FREE_DATASET/2_SENTINEL2/IMAGE_16_GRID`
+  - `3_TRAINING_MASKS/MASK_16_GRID`
+- Each `.tif` image represents a satellite tile, and each corresponding `.tif` mask represents deforestation areas in binary format.
+
+---
+
+##  Tools & Technologies
+
+- Python
+- TensorFlow / Keras
+- NumPy, tifffile
+- Scikit-learn
+- OpenCV
+- Streamlit (for frontend UI)
+
+---
+
+##  Problem Statement
+
+Manual interpretation of satellite images for deforestation detection is time-consuming and labor-intensive. There's a need for an automated, scalable solution that can process large areas quickly and accurately to support environmental monitoring and policy-making.
+
+---
+
+##  Solution
+
+The proposed solution leverages a deep learning U-Net model trained on patches of Sentinel-2 satellite images to predict pixel-level deforestation masks. The model is further integrated into a simple **Streamlit web app** to allow users to upload an image and view predicted deforestation regions instantly.
+
+---
+
+##  Methodology
+
+###  Data Preprocessing
+- Normalized Sentinel-2 bands (used B4, B3, B2 as RGB)
+- Extracted 128×128 image patches
+- Filtered patches with very few deforestation pixels to avoid class imbalance
+
+### 2. Data Augmentation
+- Applied horizontal/vertical flips, zoom, rotation, and shifts using `ImageDataGenerator`
+
+### 3. U-Net Model
+- Encoder-decoder architecture with:
+  - BatchNormalization
+  - Dropout layers
+- Final Sigmoid layer for binary mask output
+- Loss: Combined Dice Loss + Binary Crossentropy
+- Metrics: Dice Coefficient, Accuracy
+
+### 4. Training Strategy
+- Trained for 100 epochs with:
+  - EarlyStopping
+  - ReduceLROnPlateau
+  - ModelCheckpoint (best model saved as `unet_best_model.keras`)
+
+---
+
+##  Results
+
+- Achieved high **Dice Coefficient** and **validation accuracy**
+- Visualizations show strong overlap between ground truth and predicted masks
+
+
