@@ -65,7 +65,7 @@ The proposed solution leverages a deep learning U-Net model trained on patches o
 - Trained for 100 epochs with:
   - EarlyStopping
   - ReduceLROnPlateau
-  - ModelCheckpoint (best model saved as `unet_best_model.keras`)
+  - ModelCheckpoint (best model saved as `unet_final_model.keras`)
 
 ---
 
